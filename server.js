@@ -17,6 +17,7 @@ module.exports = class Server extends EventEmitter {
 		super();
 		this.port = port;
 		this.server = http.createServer((request, response) => {
+			console.time("request_duration");
 			let html = `
 <html>
 <head>
@@ -28,6 +29,7 @@ module.exports = class Server extends EventEmitter {
 </body>
 </html>`;
 			response.end(html);
+			console.timeEnd("request_duration");
 			this.emit('request');
 		});
 		this.server.listen(this.port)

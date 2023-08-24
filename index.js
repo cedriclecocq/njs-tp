@@ -22,6 +22,7 @@ routeur.register('/', (request, response) => {
 </head>
 <body>
   <p>Produit ${produit.nom} de chez ${produit.marque}</p>
+  <img src="qualite.png">
 </body>
 </html>`;
 	response.end(html);

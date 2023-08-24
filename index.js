@@ -2,6 +2,7 @@
 const http = require("http");
 const child_process = require("child_process");
 const url = require("url");
+const net = require("net");
 
 const Server = require("./server");
 const routeur = require('./routeur');
@@ -46,6 +47,27 @@ routeur.register('/ping', (request, response) => {
 	}
 	else {
 		response.end("<html><head><title>Ping</title></head><body>Domain ??</body></html>");
+	}
+});
+
+routeur.register('/whois', (request, response) => {
+	let urlObj = url.parse(request.url, true);
+	response.write("<html><head><title>Whois</title></head><body>");
+	if(urlObj.query["domain"]) {
+		let client = net.createConnection(43, 'whois.nic.fr', () => {
+			client.write(`${urlObj.query["domain"]}\r\n`);
+			client.end();
+		});
+		response.write("<pre>");
+		client.on("data", data => {
+			response.write(data);
+		});
+		client.on('end', () => {
+			response.end("</pre></body></html>");
+		});
+	}
+	else {
+		response.end("Domain ??</body></html>");
 	}
 });
 

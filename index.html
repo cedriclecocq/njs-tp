@@ -14,6 +14,107 @@
         ]);
 
 		console.log(produit.toString());
+
+		// Fonctions asynchrones via callbacks
+        function c1(val, callback) {
+			setTimeout(() => {
+				callback(null, val + ' callback1');
+            }, 3000);
+        }
+
+		function c2(val, callback) {
+			setTimeout(() => {
+				callback(null, val + ' callback2');
+			}, 4000);
+		}
+
+		function c3(val, callback) {
+			setTimeout(() => {
+				callback(null, val + ' callback3');
+			}, 5000);
+		}
+
+		// Suite traitements asynchrones via callback
+        c1('départ callback :', (err1, val1) => {
+			if(err1) {
+				console.error(err1);
+            }
+			else {
+				console.log(val1);
+				c2(val1, (err2, val2) => {
+					if(err2) {
+						console.error(err2);
+                    }
+					else {
+						console.log(val2);
+						c3(val2, (err3, val3) => {
+							if(err3) {
+								console.error(err3);
+                            }
+							else {
+								console.log(val3);
+                            }
+                        })
+                    }
+                })
+            }
+        })
+
+		// Fonctions asynchrones via promesse
+        function p1(val) {
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve(val + ' promesse1');
+				}, 3000);
+            })
+        }
+
+		function p2(val) {
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve(val + ' promesse2');
+				}, 4000);
+			})
+		}
+
+		function p3(val) {
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve(val + ' promesse3');
+				}, 5000);
+			})
+		}
+
+		// Suite traitements asynchrones via promesses
+        p1('départ promesse :')
+            .then(val1 => {
+				console.log(val1);
+				p2(val1)
+                    .then(val2 => {
+						console.log(val2);
+						p3(val2)
+                            .then(val3 => console.log(val3))
+                            .catch(err3 => console.log(err3));
+                    })
+                    .catch(err2 => console.error(err2));
+            })
+            .catch(err1 => console.error(err1));
+
+		// Suite traitements asynchrones via une fonction async
+        async function suite(depart) {
+			try {
+				const val1 = await p1(depart);
+				console.log(val1);
+				const val2 = await p2(val1);
+				console.log(val2);
+				const val3 = await p3(val2);
+				console.log(val3);
+            }
+			catch (err) {
+                console.error(err);
+			}
+        }
+		suite('départ async :');
     </script>
 </head>
 <body>

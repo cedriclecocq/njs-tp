@@ -1,5 +1,5 @@
 'use strict';
-class Produit {
+module.exports = class Produit {
 	constructor(marque, nom, prix, photos) {
 		this.marque = marque;
 		this.nom = nom;

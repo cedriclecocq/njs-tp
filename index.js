@@ -10,7 +10,7 @@ const routeur = require('./routeur');
 const Produit = require("./entity/produit");
 const Photo = require("./entity/photo");
 
-routeur.register('/', (request, response) => {
+routeur.get('/', (request, response) => {
 	const produit = new Produit('Apple', 'MacBookPro', 1999, [
 		new Photo('photo1.jpg'),
 		new Photo('photo2.jpg'),
@@ -31,7 +31,7 @@ routeur.register('/', (request, response) => {
 	response.end(html);
 })
 
-routeur.register('/ping', (request, response) => {
+routeur.get('/ping', (request, response) => {
 	let urlObj = url.parse(request.url, true);
 	if(urlObj.query["domain"]) {
 		child_process.exec(`ping -c 4 ${urlObj.query["domain"]}`, (error, stdout) => {
@@ -50,7 +50,7 @@ routeur.register('/ping', (request, response) => {
 	}
 });
 
-routeur.register('/whois', (request, response) => {
+routeur.get('/whois', (request, response) => {
 	let urlObj = url.parse(request.url, true);
 	response.write("<html><head><title>Whois</title></head><body>");
 	if(urlObj.query["domain"]) {
